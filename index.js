@@ -22,16 +22,18 @@ client.on("error",function(error){
 });
 
 var prepareMessage = function(message){
-  console.log('message: ' + message);
+
   let message_json = JSON.parse(message);
   //https://www.npmjs.com/package/uuid
   message_json['id'] = uuidv4();
+  message_json['timestamp_received'] = new Date();
+  console.log('message: ' + message_json);
   return message_json;
 };
 client.on('message',function(topic, message, packet){
-  console.log("message is "+ message);
+  //console.log("message is "+ message);
   writeData(message);
-	console.log("topic is "+ topic);
+	//console.log("topic is "+ topic);
 });
 const weather_data_file = 'weather_data.json';
 //https://stackabuse.com/reading-and-writing-json-files-with-node-js/
@@ -41,13 +43,13 @@ var writeData = function(message) {
   let message_json = prepareMessage(message); //JSON.parse(message);
   //https://www.npmjs.com/package/uuid
   //message_json['id'] = uuidv4();
-  console.log('message_json: ' + message_json);
+  //console.log('message_json: ' + message_json);
   let rawdata = fs.readFileSync(weather_data_file);
   let weatherData = JSON.parse(rawdata);
 
 
   weatherData.push(message_json);
-  console.log("weatherData["+weatherData.length+"]: " + JSON.stringify(weatherData));
+  //console.log("weatherData["+weatherData.length+"]: " + JSON.stringify(weatherData));
 
   fs.writeFile(weather_data_file, JSON.stringify(weatherData), function(err) {
     if (err) {

@@ -26,8 +26,13 @@ var prepareMessage = function(message){
   let message_json = JSON.parse(message);
   //https://www.npmjs.com/package/uuid
   message_json['id'] = uuidv4();
-  message_json['timestamp_received'] = new Date();
-  console.log('message: ' + message_json);
+
+  //
+  // https://stackoverflow.com/questions/10659523/how-to-get-the-exact-local-time-of-client
+  //
+  message_json['timestamp_received'] = new Date().toISOString();
+  //console.log('message: ' + message_json);
+  console.log('message: ' + JSON.stringify(message_json));
   return message_json;
 };
 client.on('message',function(topic, message, packet){

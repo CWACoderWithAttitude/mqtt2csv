@@ -62,7 +62,7 @@ var pushDataToAWS = function(message){
 var writeData = function(message) {
   //console.log('message: ' + message);
   let message_json = prepareMessage(message); //JSON.parse(message);
-	pushDatatoAWS(message_json);
+	pushDataToAWS(message_json);
   //https://www.npmjs.com/package/uuid
   //message_json['id'] = uuidv4();
   //console.log('message_json: ' + message_json);

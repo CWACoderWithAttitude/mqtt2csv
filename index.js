@@ -46,7 +46,7 @@ const url = 'https://m4o25zb2ng.execute-api.eu-central-1.amazonaws.com/dev/envda
 var pushDataToAWS = function(message){
   console.log('pushDataToAWS: start');
   console.log('1: ' + message);
-  const json = JSON.parse(message);
+  const json = message; //JSON.parse(message);
   console.log('2: ' + JSON.stringify(json));
   axios.post(url, json)
 		.then(function(response){

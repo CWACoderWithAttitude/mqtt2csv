@@ -25,7 +25,6 @@ client.on("error",function(error){
 });
 
 var prepareMessage = function(message){
-
   let message_json = JSON.parse(message);
   //https://www.npmjs.com/package/uuid
   message_json['id'] = uuidv4();
@@ -38,7 +37,7 @@ var prepareMessage = function(message){
   return message_json;
 };
 client.on('message',function(topic, message, packet){
-  pushDataToAWS(message);
+  //pushDataToAWS(message);
   writeData(message);
 });
 const weather_data_file = 'weather_data.json';
@@ -49,29 +48,23 @@ var pushDataToAWS = function(message){
   const json = message; //JSON.parse(message);
   console.log('2: ' + JSON.stringify(json));
   axios.post(url, json)
-		.then(function(response){
-		  console.log('pushed data to aws:\n' + message);
-		})
-		.catch(function(error){
-		  console.log('pushing data to aws failed: ' + error);
-		})
-		;
+	.then(function(response){
+	  console.log('pushed data to aws:\n' + message);
+	})
+	.catch(function(error){
+	  console.log('pushing data to aws failed: ' + error);
+	});
 };
 //https://stackabuse.com/reading-and-writing-json-files-with-node-js/
 // https://stackoverflow.com/questions/38906579/node-js-append-json-to-array
 var writeData = function(message) {
-  //console.log('message: ' + message);
   let message_json = prepareMessage(message); //JSON.parse(message);
 	pushDataToAWS(message_json);
-  //https://www.npmjs.com/package/uuid
-  //message_json['id'] = uuidv4();
-  //console.log('message_json: ' + message_json);
   let rawdata = fs.readFileSync(weather_data_file);
   let weatherData = JSON.parse(rawdata);
 
 
   weatherData.push(message_json);
-  //console.log("weatherData["+weatherData.length+"]: " + JSON.stringify(weatherData));
 
   fs.writeFile(weather_data_file, JSON.stringify(weatherData), function(err) {
     if (err) {
